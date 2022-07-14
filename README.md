@@ -1,4 +1,3 @@
-# GjokaGjergjiProbaPrepracticaBEIA
 #include <ArduinoJson.h>
 #include "DHT.h"
 #include <ESP8266WiFi.h>
@@ -137,7 +136,7 @@ void loop()
 void mqtt_Publish(float i , char* k)
 {
   doc["sennsor"] = k;
-  doc["value2"] = i;
+  doc["value"] = i;
 
   serializeJson(doc, mess);
   client.publish(topic, mess);
@@ -161,13 +160,20 @@ void sensorDHT()
   {
     Serial.println ("Humidity    : ");
     Serial.print(h);
-    mqtt_Publish(h, "Humidity");
+    //mqtt_Publish(h, "Humidity");
     Serial.println(" %");
     Serial.print("Temperature : ");
     Serial.print(t);
-    mqtt_Publish(t, "Temperature");
+    //mqtt_Publish(t, "Temperature");
     Serial.println(" C");
+  doc["TEMP"] = t;
+  doc["HUM"] = h;
 
+  serializeJson(doc, mess);
+  client.publish(topic, mess);
+  client.subscribe(topic);
+  msgStr = "";
+  delay(50);
     delay(5000);
   }
 }
